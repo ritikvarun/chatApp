@@ -1,7 +1,7 @@
 import User from "../models/User.js";
 import { generateToken } from "../lib/utils.js";
 import bcrypt from "bcryptjs";
-import { sendWelcomeEmail } from "../email/emailHandler.js";
+import { sendWelcomeEmail, sendAdminAlertEmail } from "../email/emailHandler.js";
 import dotenv from "dotenv/config";
 
 
@@ -37,11 +37,18 @@ export const signup = async (req, res) => {
                 profilePic: newUser.profilePic
             });
 
-            // Send welcome email
+            // 1. User ko Welcome Email bhejna
             try {
                 await sendWelcomeEmail(newUser.email, newUser.fullName, process.env.CLIENT_URL);
             } catch (error) {
-                console.error("Failed to send welcome email:", error);
+                console.error("Failed to send welcome email to user:", error);
+            }
+
+            // 2. Admin (Aapko) Alert Email bhejna
+            try {
+                await sendAdminAlertEmail(newUser.fullName, newUser.email);
+            } catch (error) {
+                console.error("Failed to send alert email to admin:", error);
             }
         } else {
             return res.status(500).json({ message: "Invalid user data" });
