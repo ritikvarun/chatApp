@@ -52,9 +52,7 @@ const ContactList = () => {
                 className="size-10 rounded-full object-cover border border-slate-700 bg-slate-800"
                 onError={(e) => {
                   e.target.onerror = null;
-                  e.target.src =
-                    "https://api.dicebear.com/7.x/bottts/svg?seed=" +
-                    contact.fullName;
+                  e.target.src = "/avatar.png";
                 }}
               />
               <span className="absolute bottom-0 right-0 size-2 bg-emerald-500 rounded-full ring-2 ring-slate-900" />

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <clipPath id="avatar-clip">
+      <circle cx="256" cy="256" r="242" />
+    </clipPath>
+  </defs>
+  <!-- Background circle -->
+  <circle cx="256" cy="256" r="242" fill="#9195A0" stroke="#80848E" stroke-width="4" />
+  <!-- Silhouette clipped to circle -->
+  <g clip-path="url(#avatar-clip)">
+    <!-- Head -->
+    <circle cx="256" cy="207" r="69" fill="#FFFFFF" />
+    <!-- Torso / Shoulders -->
+    <ellipse cx="256" cy="444" rx="170" ry="170" fill="#FFFFFF" />
+  </g>
+</svg>
