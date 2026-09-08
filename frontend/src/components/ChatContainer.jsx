@@ -1,54 +1,102 @@
+import { useEffect } from "react";
 import { useChatStore } from "../store/useChatStore";
-import { X } from "lucide-react";
+import { useAuthStore } from "../store/useAuthStore";
+import ChatHeader from "./ChatHeader";
+import NoChatHistoryPlaceholder from "./NoChatHistoryPlaceholder";
+import { Loader2 } from "lucide-react";
 
-const ChatContainer = () => {
-  const { selectedUser, setSelectedUser } = useChatStore();
+function ChatContainer() {
+  const { selectedUser, getMessagesByUserId, messages, isMessagesLoading } =
+    useChatStore();
+  const { authUser } = useAuthStore();
+
+  useEffect(() => {
+    if (selectedUser?._id) {
+      getMessagesByUserId(selectedUser._id);
+    }
+  }, [selectedUser, getMessagesByUserId]);
 
   if (!selectedUser) return null;
 
   return (
     <div className="flex-1 flex flex-col h-full overflow-hidden">
-      {/* CHAT HEADER */}
-      <div className="p-4 border-b border-slate-700/50 flex items-center justify-between bg-slate-800/30">
-        <div className="flex items-center gap-3">
-          <div className="relative">
-            <img
-              src={selectedUser.profilePic || "/avatar.png"}
-              alt={selectedUser.fullName}
-              className="size-10 rounded-full object-cover border border-slate-700 bg-slate-800"
-              onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = "/avatar.png";
-              }}
-            />
-            <span className="absolute bottom-0 right-0 size-2.5 bg-emerald-500 rounded-full ring-2 ring-slate-900" />
-          </div>
-          <div>
-            <h3 className="font-semibold text-slate-100 text-sm">
-              {selectedUser.fullName}
-            </h3>
-            <p className="text-xs text-emerald-400">Online</p>
-          </div>
-        </div>
+      <ChatHeader />
 
-        <button
-          onClick={() => setSelectedUser(null)}
-          className="p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-700/50 transition-colors cursor-pointer"
-        >
-          <X className="size-5" />
-        </button>
-      </div>
-
-      {/* MESSAGES BODY */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        <div className="text-center my-6">
-          <span className="text-xs text-slate-500 bg-slate-800/80 px-3 py-1 rounded-full border border-slate-700/40">
-            This is the start of your conversation with {selectedUser.fullName}
-          </span>
-        </div>
+      <div className="flex-1 px-6 overflow-y-auto py-8">
+        {isMessagesLoading ? (
+          <div className="flex flex-col items-center justify-center h-full text-slate-500 gap-2">
+            <Loader2 className="size-6 animate-spin text-cyan-500" />
+            <p className="text-xs">Loading messages...</p>
+          </div>
+        ) : messages.length > 0 ? (
+          <div className="space-y-4">
+            {messages.map((message) => {
+              const isSender = message.senderId === authUser?._id;
+              return (
+                <div
+                  key={message._id}
+                  className={`flex items-end gap-2 ${
+                    isSender ? "justify-end" : "justify-start"
+                  }`}
+                >
+                  {!isSender && (
+                    <img
+                      src={selectedUser.profilePic || "/avatar.png"}
+                      alt={selectedUser.fullName}
+                      className="size-8 rounded-full object-cover border border-slate-700 bg-slate-800"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = "/avatar.png";
+                      }}
+                    />
+                  )}
+                  <div
+                    className={`max-w-xs md:max-w-md px-4 py-2.5 rounded-2xl text-sm ${
+                      isSender
+                        ? "bg-cyan-500 text-slate-950 font-medium rounded-br-none shadow-md shadow-cyan-500/10"
+                        : "bg-slate-800 text-slate-100 border border-slate-700/60 rounded-bl-none shadow-sm"
+                    }`}
+                  >
+                    {message.image && (
+                      <img
+                        src={message.image}
+                        alt="Attachment"
+                        className="rounded-lg mb-2 max-h-48 w-full object-cover"
+                      />
+                    )}
+                    {message.text && <p className="break-words">{message.text}</p>}
+                    <span
+                      className={`text-[10px] block mt-1 ${
+                        isSender ? "text-cyan-950/70 text-right" : "text-slate-400"
+                      }`}
+                    >
+                      {new Date(message.createdAt).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </span>
+                  </div>
+                  {isSender && (
+                    <img
+                      src={authUser?.profilePic || "/avatar.png"}
+                      alt={authUser?.fullName}
+                      className="size-8 rounded-full object-cover border border-slate-700 bg-slate-800"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = "/avatar.png";
+                      }}
+                    />
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <NoChatHistoryPlaceholder name={selectedUser.fullName} />
+        )}
       </div>
     </div>
   );
-};
+}
 
 export default ChatContainer;
