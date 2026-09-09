@@ -70,6 +70,11 @@ function ChatContainer() {
                         src={message.image}
                         alt="Attachment"
                         className="rounded-lg mb-2 max-h-48 w-full object-cover"
+                        onLoad={() =>
+                          messageEndRef.current?.scrollIntoView({
+                            behavior: "smooth",
+                          })
+                        }
                       />
                     )}
                     {message.text && <p className="break-words">{message.text}</p>}
