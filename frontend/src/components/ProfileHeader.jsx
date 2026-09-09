@@ -43,9 +43,8 @@ const ProfileHeader = () => {
             <img
               src={authUser?.profilePic || "/avatar.png"}
               alt={authUser?.fullName || "User"}
-              className={`size-10 rounded-full object-cover border border-slate-700 bg-slate-800 transition-all ${
-                isUpdatingProfile ? "opacity-50" : "group-hover:border-cyan-500/80"
-              }`}
+              className={`size-10 rounded-full object-cover border border-slate-700 bg-slate-800 transition-all ${isUpdatingProfile ? "opacity-50" : "group-hover:border-cyan-500/80"
+                }`}
               onError={(e) => {
                 e.target.onerror = null;
                 e.target.src = "/avatar.png";
@@ -55,9 +54,8 @@ const ProfileHeader = () => {
             {/* QUICK CAMERA ICON / LOADING OVERLAY */}
             <label
               htmlFor="quick-avatar-upload"
-              className={`absolute inset-0 rounded-full bg-slate-950/60 backdrop-blur-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-cyan-400 ${
-                isUpdatingProfile ? "opacity-100 pointer-events-none" : ""
-              }`}
+              className={`absolute inset-0 rounded-full bg-slate-950/60 backdrop-blur-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-cyan-400 ${isUpdatingProfile ? "opacity-100 pointer-events-none" : ""
+                }`}
               title="Change profile photo"
             >
               {isUpdatingProfile ? (
@@ -103,11 +101,10 @@ const ProfileHeader = () => {
           </button>
           <button
             onClick={toggleSound}
-            className={`p-2 rounded-lg transition-colors cursor-pointer ${
-              isSoundEnabled
+            className={`p-2 rounded-lg transition-colors cursor-pointer ${isSoundEnabled
                 ? "text-cyan-400 hover:bg-cyan-500/10"
                 : "text-slate-500 hover:bg-slate-700/50"
-            }`}
+              }`}
             title={isSoundEnabled ? "Mute sounds" : "Enable sounds"}
           >
             {isSoundEnabled ? (
