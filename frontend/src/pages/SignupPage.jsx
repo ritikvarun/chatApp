@@ -29,13 +29,13 @@ function SignUpPage() {
   };
 
   return (
-    <div className="w-full min-h-screen sm:min-h-0 flex items-center justify-center p-0 sm:p-4">
-      <div className="relative w-full max-w-5xl md:h-[750px] min-h-[100dvh] sm:min-h-[600px] flex">
-        <BorderAnimatedContainer>
-          <div className="w-full h-full flex flex-col md:flex-row">
+    <div className="w-full h-full sm:h-auto flex items-center justify-center p-0 sm:p-4 overflow-hidden">
+      <div className="relative w-full h-full sm:h-auto max-w-5xl md:h-[750px] sm:min-h-[600px] flex flex-col flex-1">
+        <BorderAnimatedContainer className="h-full">
+          <div className="w-full h-full flex-1 flex flex-col md:flex-row bg-white">
             {/* FORM COLUMN - LEFT SIDE */}
-            <div className="w-full md:w-1/2 p-6 sm:p-10 flex flex-col justify-center md:border-r border-slate-200/80 bg-white overflow-y-auto">
-              <div className="w-full max-w-md mx-auto">
+            <div className="w-full md:w-1/2 p-6 sm:p-10 flex-1 flex flex-col justify-center md:border-r border-slate-200/80 bg-white overflow-y-auto">
+              <div className="w-full max-w-md mx-auto my-auto">
                 {/* LOGO & HEADING */}
                 <div className="text-center mb-8">
                   <div className="inline-flex items-center justify-center size-12 rounded-xl bg-cyan-50 border border-cyan-200 text-cyan-600 mb-3 shadow-md shadow-cyan-500/10">
