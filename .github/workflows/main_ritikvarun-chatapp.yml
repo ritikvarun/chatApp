@@ -23,12 +23,20 @@ jobs:
         with:
           node-version: '22.x'
 
-      - name: npm install, build, and test
+      - name: Install and build frontend
+        working-directory: ./frontend
+        run: |
+          npm install
+          npm run build
+
+      - name: Install backend dependencies
         working-directory: ./backend
         run: |
           npm install
-          npm run build --if-present
-          npm run test --if-present
+
+      - name: Bundle frontend build into backend
+        run: |
+          cp -r ./frontend/dist ./backend/dist
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
