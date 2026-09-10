@@ -26,6 +26,15 @@ export const axiosInstance = axios.create({
   withCredentials: true,
 });
 
+// Attach Authorization header if token exists in localStorage (fixes mobile & cross-domain 3rd-party cookie blocking)
+axiosInstance.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
 // Guard against HTML responses (e.g. when an SPA rewrite catches a missing API route)
 axiosInstance.interceptors.response.use(
   (response) => {

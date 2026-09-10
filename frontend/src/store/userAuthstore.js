@@ -21,12 +21,14 @@ export const useAuthStore = create((set, get) => ({
         set({ authUser: res.data });
         get().connectSocket();
       } else {
+        localStorage.removeItem("token");
         set({ authUser: null });
       }
     } catch (error) {
       if (error.response?.status !== 401) {
         console.log("Error in checkAuth:", error);
       }
+      localStorage.removeItem("token");
       set({ authUser: null });
     } finally {
       set({ isCheckingAuth: false });
@@ -37,6 +39,9 @@ export const useAuthStore = create((set, get) => ({
     set({ isSigningUp: true });
     try {
       const res = await axiosInstance.post("/auth/signup", data);
+      if (res.data?.token) {
+        localStorage.setItem("token", res.data.token);
+      }
       set({ authUser: res.data });
       toast.success("Account created successfully");
       get().connectSocket();
@@ -55,6 +60,9 @@ export const useAuthStore = create((set, get) => ({
     set({ isLoggingIn: true });
     try {
       const res = await axiosInstance.post("/auth/login", data);
+      if (res.data?.token) {
+        localStorage.setItem("token", res.data.token);
+      }
       set({ authUser: res.data });
       toast.success("Logged in successfully");
       get().connectSocket();
@@ -72,12 +80,15 @@ export const useAuthStore = create((set, get) => ({
   logout: async () => {
     try {
       await axiosInstance.post("/auth/logout");
+      localStorage.removeItem("token");
       set({ authUser: null });
       toast.success("Logged out successfully");
       get().disconnectSocket();
       return { success: true };
     } catch (error) {
       console.log("Error in logout:", error);
+      localStorage.removeItem("token");
+      set({ authUser: null });
       const message = error.response?.data?.message || "Logout failed";
       toast.error(message);
       return { success: false, message };
@@ -105,8 +116,13 @@ export const useAuthStore = create((set, get) => ({
     const { authUser } = get();
     if (!authUser || get().socket?.connected) return;
 
+    const token = localStorage.getItem("token");
+
     const socket = io(BASE_URL, {
-      withCredentials: true, // this ensures cookies are sent with the connection
+      withCredentials: true,
+      auth: {
+        token: token,
+      },
     });
 
     socket.connect();

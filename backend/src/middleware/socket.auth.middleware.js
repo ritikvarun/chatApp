@@ -7,7 +7,10 @@ export const socketAuthMiddleware = async (socket, next) => {
     // extract token from cookies or auth handshake
     const token =
       socket.handshake.auth?.token ||
-      socket.handshake.headers.cookie
+      (socket.handshake.headers?.authorization?.startsWith("Bearer ")
+        ? socket.handshake.headers.authorization.split(" ")[1]
+        : null) ||
+      socket.handshake.headers?.cookie
         ?.split("; ")
         .find((row) => row.startsWith("jwt="))
         ?.split("=")[1];
