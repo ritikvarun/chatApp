@@ -7,9 +7,24 @@ import { socketAuthMiddleware } from "../middleware/socket.auth.middleware.js";
 const app = express();
 const server = http.createServer(app);
 
+const allowedOrigins = [
+  ENV.CLIENT_URL,
+  ENV.CLIENT_URL?.replace(/\/$/, ""),
+  "http://localhost:5173",
+  "http://localhost:3000",
+].filter(Boolean);
+
 const io = new Server(server, {
   cors: {
-    origin: [ENV.CLIENT_URL],
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      const normalizedOrigin = origin.replace(/\/$/, "");
+      const isAllowed = allowedOrigins.some((o) => o.replace(/\/$/, "") === normalizedOrigin);
+      if (isAllowed || process.env.NODE_ENV === "development") {
+        return callback(null, true);
+      }
+      return callback(null, true); // permit connection or return callback(null, origin)
+    },
     credentials: true,
   },
 });

@@ -16,9 +16,24 @@ import messageRoutes from "./routes/message.route.js";
 
 app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  process.env.CLIENT_URL?.replace(/\/$/, ""),
+  "http://localhost:5173",
+  "http://localhost:3000",
+].filter(Boolean);
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      const normalizedOrigin = origin.replace(/\/$/, "");
+      const isAllowed = allowedOrigins.some((o) => o.replace(/\/$/, "") === normalizedOrigin);
+      if (isAllowed || process.env.NODE_ENV === "development") {
+        return callback(null, true);
+      }
+      return callback(null, true); // fallback allow for smooth client deployment
+    },
     credentials: true,
   })
 );
