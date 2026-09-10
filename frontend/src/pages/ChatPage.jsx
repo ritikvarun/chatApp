@@ -11,7 +11,7 @@ function ChatPage() {
   const { activeTab, selectedUser } = useChatStore();
 
   return (
-    <div className="relative w-full max-w-6xl h-[100dvh] sm:h-[calc(100dvh-1.5rem)] md:h-[820px]">
+    <div className="relative w-full max-w-6xl h-full sm:h-[calc(100dvh-1.5rem)] md:h-[820px] overflow-hidden">
       <BorderAnimatedContainer>
         <div className="flex h-full w-full">
           {/* LEFT SIDE - Sidebar (full width on mobile when no chat is selected) */}

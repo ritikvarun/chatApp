@@ -28,9 +28,15 @@ function ChatContainer() {
   }, [selectedUser?._id, getMessagesByUserId, subscribeToMessages, unsubscribeFromMessages, socket]);
 
   useEffect(() => {
-    if (messageEndRef.current && messages) {
-      messageEndRef.current.scrollIntoView({ behavior: "smooth" });
-    }
+    const scrollToBottom = () => {
+      messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    scrollToBottom();
+    window.visualViewport?.addEventListener("resize", scrollToBottom);
+    return () => {
+      window.visualViewport?.removeEventListener("resize", scrollToBottom);
+    };
   }, [messages]);
 
   if (!selectedUser) return null;
@@ -39,7 +45,7 @@ function ChatContainer() {
     <div className="flex-1 flex flex-col h-full overflow-hidden bg-[#fafbfc]">
       <ChatHeader />
 
-      <div className="flex-1 px-3 py-4 sm:px-6 sm:py-6 overflow-y-auto">
+      <div className="flex-1 px-3 py-4 sm:px-6 sm:py-6 overflow-y-auto overscroll-contain">
         {isMessagesLoading ? (
           <div className="flex flex-col items-center justify-center h-full text-slate-500 gap-2">
             <Loader2 className="size-6 animate-spin text-cyan-600" />

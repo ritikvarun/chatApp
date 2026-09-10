@@ -53,14 +53,14 @@ function MessageInput() {
   };
 
   return (
-    <div className="p-2.5 sm:p-4 w-full border-t border-slate-200/90 bg-white/95 backdrop-blur-md shrink-0">
+    <div className="p-2 sm:p-3.5 w-full border-t border-slate-200/90 bg-white backdrop-blur-md shrink-0 z-30">
       {imagePreview && (
-        <div className="mb-2.5 flex items-center gap-2">
+        <div className="mb-2 flex items-center gap-2">
           <div className="relative">
             <img
               src={imagePreview}
               alt="Attachment Preview"
-              className="size-20 object-cover rounded-xl border border-slate-200 shadow-sm"
+              className="size-16 sm:size-20 object-cover rounded-xl border border-slate-200 shadow-sm"
             />
             <button
               onClick={removeImage}
@@ -85,10 +85,10 @@ function MessageInput() {
         <button
           type="button"
           onClick={() => fileInputRef.current?.click()}
-          className={`p-2.5 rounded-xl sm:rounded-2xl border transition-all cursor-pointer shrink-0 ${
+          className={`p-2 sm:p-2.5 rounded-full border transition-all cursor-pointer shrink-0 ${
             imagePreview
               ? "text-cyan-600 border-cyan-400 bg-cyan-50"
-              : "border-slate-200 text-slate-500 hover:text-cyan-600 hover:border-cyan-400 hover:bg-slate-100 bg-[#f8fafc]"
+              : "border-slate-200 text-slate-500 hover:text-cyan-600 hover:border-cyan-400 hover:bg-slate-100 bg-slate-50"
           }`}
           title="Attach image"
         >
@@ -97,7 +97,7 @@ function MessageInput() {
 
         <input
           type="text"
-          placeholder="Type a message..."
+          placeholder="Message..."
           value={text}
           onChange={(e) => {
             setText(e.target.value);
@@ -105,13 +105,13 @@ function MessageInput() {
               playRandomKeyStrokeSound();
             }
           }}
-          className="flex-1 bg-[#f1f5f9] border border-slate-200/90 rounded-xl sm:rounded-2xl px-3.5 sm:px-4 py-2 sm:py-2.5 text-sm text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all shadow-xs"
+          className="flex-1 bg-slate-100/90 border border-slate-200/90 rounded-full px-4 py-2 sm:py-2.5 text-sm text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all shadow-xs"
         />
 
         <button
           type="submit"
           disabled={!text.trim() && !imagePreview}
-          className="p-2.5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white disabled:opacity-40 disabled:hover:from-cyan-600 disabled:hover:to-blue-600 disabled:cursor-not-allowed rounded-xl sm:rounded-2xl font-medium transition-all shadow-md shadow-blue-500/20 active:scale-95 cursor-pointer shrink-0"
+          className="p-2 sm:p-2.5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white disabled:opacity-40 disabled:hover:from-cyan-600 disabled:hover:to-blue-600 disabled:cursor-not-allowed rounded-full font-medium transition-all shadow-md shadow-blue-500/20 active:scale-95 cursor-pointer shrink-0"
           title="Send message"
         >
           <Send className="size-5" />
