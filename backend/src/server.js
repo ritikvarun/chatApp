@@ -54,11 +54,33 @@ const possibleDistPaths = [
 const frontendDistPath = possibleDistPaths.find((p) => fs.existsSync(p));
 
 if (frontendDistPath) {
-  app.use(express.static(frontendDistPath));
+  app.use(
+    express.static(frontendDistPath, {
+      setHeaders: (res, filePath) => {
+        if (filePath.endsWith(".js") || filePath.endsWith(".mjs")) {
+          res.setHeader("Content-Type", "application/javascript; charset=utf-8");
+        } else if (filePath.endsWith(".css")) {
+          res.setHeader("Content-Type", "text/css; charset=utf-8");
+        } else if (filePath.endsWith(".svg")) {
+          res.setHeader("Content-Type", "image/svg+xml");
+        } else if (filePath.endsWith(".json")) {
+          res.setHeader("Content-Type", "application/json; charset=utf-8");
+        } else if (filePath.endsWith(".png")) {
+          res.setHeader("Content-Type", "image/png");
+        } else if (filePath.endsWith(".jpg") || filePath.endsWith(".jpeg")) {
+          res.setHeader("Content-Type", "image/jpeg");
+        }
+      },
+    })
+  );
 
   app.get("/{*splat}", (req, res) => {
     if (req.path.startsWith("/api")) {
       return res.status(404).json({ message: "API route not found" });
+    }
+    // Prevent serving index.html for missing static files (.js, .css, etc.)
+    if (/\.(js|css|svg|png|jpg|jpeg|gif|ico|json|map|woff|woff2|ttf)$/i.test(req.path)) {
+      return res.status(404).send("File not found");
     }
     res.sendFile(path.join(frontendDistPath, "index.html"));
   });
