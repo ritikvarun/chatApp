@@ -1,8 +1,13 @@
 import axios from "axios";
 
 export const getBackendURL = () => {
-  if (import.meta.env.VITE_BACKEND_URL) {
-    return import.meta.env.VITE_BACKEND_URL.replace(/\/$/, "");
+  let url = import.meta.env.VITE_BACKEND_URL;
+  if (url) {
+    url = url.trim().replace(/\/$/, "");
+    if (!/^https?:\/\//i.test(url)) {
+      url = `https://${url}`;
+    }
+    return url;
   }
   if (import.meta.env.MODE === "development") {
     return "http://localhost:3000";
