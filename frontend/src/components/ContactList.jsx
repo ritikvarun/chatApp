@@ -21,7 +21,9 @@ const ContactList = () => {
     );
   }
 
-  if (allContacts.length === 0) {
+  const contactsList = Array.isArray(allContacts) ? allContacts : [];
+
+  if (contactsList.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center h-48 text-center p-4 text-slate-500">
         <div className="size-10 rounded-full bg-slate-200/70 flex items-center justify-center text-slate-500 mb-2">
@@ -35,7 +37,7 @@ const ContactList = () => {
 
   return (
     <div className="space-y-1">
-      {allContacts.map((contact) => {
+      {contactsList.map((contact) => {
         const isSelected = selectedUser?._id === contact._id;
         const isOnline = onlineUsers.includes(contact._id);
         return (

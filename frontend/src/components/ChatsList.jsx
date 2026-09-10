@@ -21,7 +21,9 @@ const ChatsList = () => {
     );
   }
 
-  if (chats.length === 0) {
+  const chatList = Array.isArray(chats) ? chats : [];
+
+  if (chatList.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center h-48 text-center p-4 text-slate-500">
         <div className="size-10 rounded-full bg-slate-200/70 flex items-center justify-center text-slate-500 mb-2">
@@ -37,7 +39,7 @@ const ChatsList = () => {
 
   return (
     <div className="space-y-1">
-      {chats.map((chat) => {
+      {chatList.map((chat) => {
         const isSelected = selectedUser?._id === chat._id;
         const isOnline = onlineUsers.includes(chat._id);
         return (

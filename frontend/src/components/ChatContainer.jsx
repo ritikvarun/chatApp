@@ -45,7 +45,7 @@ function ChatContainer() {
             <Loader2 className="size-6 animate-spin text-cyan-600" />
             <p className="text-xs">Loading messages...</p>
           </div>
-        ) : messages.length > 0 ? (
+        ) : (Array.isArray(messages) && messages.length > 0) ? (
           <div className="space-y-3 sm:space-y-4">
             {messages.map((message) => {
               const isSender = message.senderId === authUser?._id;
