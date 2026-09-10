@@ -27,6 +27,12 @@ export const createWelcomeEmailTemplate = (name, clientURL) => {
 };
 
 export const createNewUserAdminEmailTemplate = (fullName, email) => {
+  const formattedTime = new Date().toLocaleString("en-IN", {
+    timeZone: "Asia/Kolkata",
+    dateStyle: "medium",
+    timeStyle: "short",
+  });
+
   return `
 <!DOCTYPE html>
 <html lang="en">
@@ -36,20 +42,20 @@ export const createNewUserAdminEmailTemplate = (fullName, email) => {
   <title>New User Registration</title>
 </head>
 <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
-  <div style="background: linear-gradient(to right, #10b981, #059669); padding: 25px; text-align: center; border-radius: 12px 12px 0 0;">
-    <h1 style="color: white; margin: 0; font-size: 24px;">🎉 New User Signed Up!</h1>
+  <div style="background: linear-gradient(135deg, #10b981, #059669); padding: 25px; text-align: center; border-radius: 12px 12px 0 0;">
+    <h1 style="color: white; margin: 0; font-size: 24px;">🎉 New User Joined Your Chat App!</h1>
   </div>
   <div style="background-color: #f9fafb; padding: 25px; border-radius: 0 0 12px 12px; border: 1px solid #e5e7eb;">
-    <p style="font-size: 16px;">Hello Admin,</p>
-    <p style="font-size: 16px;">A new user has just registered on your <strong>Chatify</strong> app.</p>
+    <p style="font-size: 16px;">Hello <strong>Ritik</strong>,</p>
+    <p style="font-size: 15px; color: #4b5563;">Aapke app par ek naye user ne abhi signup kiya hai:</p>
     
-    <div style="background: white; border-radius: 8px; padding: 15px; border: 1px solid #e5e7eb; margin: 20px 0;">
-      <p style="margin: 5px 0;"><strong>👤 Name:</strong> ${fullName}</p>
-      <p style="margin: 5px 0;"><strong>📧 Email:</strong> ${email}</p>
-      <p style="margin: 5px 0;"><strong>⏰ Time:</strong> ${new Date().toLocaleString()}</p>
+    <div style="background: white; border-radius: 8px; padding: 18px; border: 1px solid #e5e7eb; margin: 20px 0;">
+      <p style="margin: 8px 0; font-size: 15px;"><strong>👤 Full Name:</strong> ${fullName}</p>
+      <p style="margin: 8px 0; font-size: 15px;"><strong>📧 Email:</strong> <a href="mailto:${email}" style="color: #059669; text-decoration: none; font-weight: bold;">${email}</a></p>
+      <p style="margin: 8px 0; font-size: 14px; color: #6b7280;"><strong>⏰ Signup Time:</strong> ${formattedTime} (IST)</p>
     </div>
 
-    <p style="font-size: 12px; color: #9ca3af; text-align: center; margin-top: 20px;">Chatify Admin Notification</p>
+    <p style="font-size: 12px; color: #9ca3af; text-align: center; margin-top: 20px;">Chatify Admin Notification System</p>
   </div>
 </body>
 </html>

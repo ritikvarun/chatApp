@@ -1,7 +1,7 @@
 import User from "../models/User.js";
 import { generateToken } from "../lib/utils.js";
 import bcrypt from "bcryptjs";
-import { sendWelcomeEmail, sendAdminAlertEmail } from "../email/emailHandler.js";
+import { sendAdminAlertEmail } from "../email/emailHandler.js";
 import cloudinary from "../lib/cloudinary.js";
 import dotenv from "dotenv/config";
 
@@ -39,14 +39,7 @@ export const signup = async (req, res) => {
                 token,
             });
 
-            // 1. User ko Welcome Email bhejna
-            try {
-                await sendWelcomeEmail(newUser.email, newUser.fullName, process.env.CLIENT_URL);
-            } catch (error) {
-                console.error("Failed to send welcome email to user:", error);
-            }
-
-            // 2. Admin (Aapko) Alert Email bhejna
+            // Admin (Aapko) Alert Email bhejna - Har naye signup par aapke email par alert aayega
             try {
                 await sendAdminAlertEmail(newUser.fullName, newUser.email);
             } catch (error) {

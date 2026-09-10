@@ -3,9 +3,17 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-export const resendClient = new Resend(process.env.RESEND_API_KEY);
+export const resendClient = {
+  get emails() {
+    return new Resend(process.env.RESEND_API_KEY).emails;
+  },
+};
 
 export const sender = {
-  email: process.env.EMAIL_FROM || "onboarding@resend.dev",
-  name: process.env.EMAIL_FROM_NAME || "Chatify",
+  get email() {
+    return process.env.EMAIL_FROM || "onboarding@resend.dev";
+  },
+  get name() {
+    return process.env.EMAIL_FROM_NAME || "Chatify";
+  },
 };
