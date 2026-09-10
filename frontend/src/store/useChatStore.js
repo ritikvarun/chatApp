@@ -11,10 +11,35 @@ export const useChatStore = create((set, get) => ({
   selectedUser: null,
   isUsersLoading: false,
   isMessagesLoading: false,
+  isTyping: false,
   isSoundEnabled: localStorage.getItem("isSoundEnabled") === "true",
 
   setActiveTab: (tab) => set({ activeTab: tab }),
-  setSelectedUser: (selectedUser) => set({ selectedUser }),
+  setSelectedUser: (selectedUser) => {
+    set({ selectedUser, isTyping: false });
+    if (selectedUser) {
+      const socket = useAuthStore.getState().socket;
+      if (socket) {
+        socket.emit("markMessagesAsSeen", { senderId: selectedUser._id });
+      }
+    }
+  },
+
+  sendTyping: () => {
+    const { selectedUser } = get();
+    const socket = useAuthStore.getState().socket;
+    if (selectedUser && socket) {
+      socket.emit("typing", { receiverId: selectedUser._id });
+    }
+  },
+
+  sendStopTyping: () => {
+    const { selectedUser } = get();
+    const socket = useAuthStore.getState().socket;
+    if (selectedUser && socket) {
+      socket.emit("stopTyping", { receiverId: selectedUser._id });
+    }
+  },
 
   toggleSound: () => {
     localStorage.setItem("isSoundEnabled", !get().isSoundEnabled);
@@ -101,22 +126,49 @@ export const useChatStore = create((set, get) => ({
     if (!socket) return;
 
     socket.off("newMessage");
+    socket.off("messagesSeen");
+    socket.off("userTyping");
+    socket.off("userStoppedTyping");
 
     socket.on("newMessage", (newMessage) => {
       const isMessageSentFromSelectedUser = newMessage.senderId === selectedUser._id;
       if (!isMessageSentFromSelectedUser) return;
 
+      // Mark message as seen immediately since recipient has this chat open
+      socket.emit("markMessagesAsSeen", { senderId: selectedUser._id });
+
       const currentMessages = get().messages;
-      // Avoid duplicate message if already added
       if (currentMessages.some((msg) => msg._id === newMessage._id)) return;
 
       set({
-        messages: [...currentMessages, newMessage],
+        messages: [...currentMessages, { ...newMessage, seen: true }],
       });
 
       if (get().isSoundEnabled) {
         const sound = new Audio("/sounds/keystroke1.mp3");
         sound.play().catch(() => {});
+      }
+    });
+
+    socket.on("messagesSeen", ({ byUserId }) => {
+      if (byUserId === selectedUser._id) {
+        set({
+          messages: get().messages.map((msg) =>
+            msg.receiverId === byUserId ? { ...msg, seen: true } : msg
+          ),
+        });
+      }
+    });
+
+    socket.on("userTyping", ({ senderId }) => {
+      if (senderId === selectedUser._id) {
+        set({ isTyping: true });
+      }
+    });
+
+    socket.on("userStoppedTyping", ({ senderId }) => {
+      if (senderId === selectedUser._id) {
+        set({ isTyping: false });
       }
     });
   },
@@ -125,6 +177,10 @@ export const useChatStore = create((set, get) => ({
     const socket = useAuthStore.getState().socket;
     if (!socket) return;
     socket.off("newMessage");
+    socket.off("messagesSeen");
+    socket.off("userTyping");
+    socket.off("userStoppedTyping");
+    set({ isTyping: false });
   },
 }));
 

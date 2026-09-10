@@ -3,7 +3,7 @@ import { useAuthStore } from "../store/userAuthstore";
 import { X, ArrowLeft } from "lucide-react";
 
 const ChatHeader = () => {
-  const { selectedUser, setSelectedUser } = useChatStore();
+  const { selectedUser, setSelectedUser, isTyping } = useChatStore();
   const { onlineUsers } = useAuthStore();
 
   if (!selectedUser) return null;
@@ -11,7 +11,7 @@ const ChatHeader = () => {
   const isOnline = onlineUsers.includes(selectedUser._id);
 
   return (
-    <div className="sticky top-0 z-40 px-3 py-3 sm:px-5 sm:py-3.5 border-b border-slate-200/90 flex items-center justify-between bg-white/95 backdrop-blur-md shadow-xs shrink-0">
+    <div className="sticky top-0 z-40 pt-3 pb-2.5 px-3.5 sm:py-3.5 sm:px-5 border-b border-slate-200/90 flex items-center justify-between bg-white/95 backdrop-blur-md shadow-xs shrink-0">
       <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
         {/* MOBILE BACK BUTTON */}
         <button
@@ -40,9 +40,15 @@ const ChatHeader = () => {
           <h3 className="font-semibold text-slate-800 text-sm truncate">
             {selectedUser.fullName}
           </h3>
-          <p className={`text-xs ${isOnline ? "text-emerald-600 font-medium" : "text-slate-400"}`}>
-            {isOnline ? "Online" : "Offline"}
-          </p>
+          {isTyping ? (
+            <p className="text-xs text-cyan-600 font-medium animate-pulse">
+              typing...
+            </p>
+          ) : (
+            <p className={`text-xs ${isOnline ? "text-emerald-600 font-medium" : "text-slate-400"}`}>
+              {isOnline ? "Online" : "Offline"}
+            </p>
+          )}
         </div>
       </div>
 

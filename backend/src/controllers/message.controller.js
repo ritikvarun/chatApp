@@ -49,6 +49,19 @@ export const getMessages = async (req, res) => {
     const { id: userToChatId } = req.params;
     const myId = req.user._id;
 
+    // Mark unread messages sent by userToChatId to myId as seen
+    const updated = await Message.updateMany(
+      { senderId: userToChatId, receiverId: myId, seen: false },
+      { $set: { seen: true } }
+    );
+
+    if (updated.modifiedCount > 0) {
+      const senderSocketId = getReceiverSocketId(userToChatId);
+      if (senderSocketId) {
+        io.to(senderSocketId).emit("messagesSeen", { byUserId: myId.toString() });
+      }
+    }
+
     const messages = await Message.find({
       $or: [
         { senderId: myId, receiverId: userToChatId },

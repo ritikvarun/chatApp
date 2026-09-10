@@ -8,13 +8,17 @@ function MessageInput() {
   const [text, setText] = useState("");
   const [imagePreview, setImagePreview] = useState(null);
   const fileInputRef = useRef(null);
+  const typingTimeoutRef = useRef(null);
 
-  const { sendMessage, isSoundEnabled } = useChatStore();
+  const { sendMessage, isSoundEnabled, sendTyping, sendStopTyping } = useChatStore();
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!text.trim() && !imagePreview) return;
     if (isSoundEnabled) playRandomKeyStrokeSound();
+
+    if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+    sendStopTyping();
 
     try {
       await sendMessage({
@@ -104,6 +108,11 @@ function MessageInput() {
             if (isSoundEnabled && e.target.value.length > text.length) {
               playRandomKeyStrokeSound();
             }
+            sendTyping();
+            if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+            typingTimeoutRef.current = setTimeout(() => {
+              sendStopTyping();
+            }, 1500);
           }}
           className="flex-1 bg-slate-100/90 border border-slate-200/90 rounded-full px-4 py-2 sm:py-2.5 text-sm text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all shadow-xs"
         />

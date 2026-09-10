@@ -48,6 +48,40 @@ io.on("connection", (socket) => {
   // io.emit() is used to send events to all connected clients
   io.emit("getUsers", Object.keys(userSocketMap));
 
+  // Real-time typing indicators
+  socket.on("typing", ({ receiverId }) => {
+    const receiverSocketId = getReceiverSocketId(receiverId);
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("userTyping", { senderId: userId });
+    }
+  });
+
+  socket.on("stopTyping", ({ receiverId }) => {
+    const receiverSocketId = getReceiverSocketId(receiverId);
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("userStoppedTyping", { senderId: userId });
+    }
+  });
+
+  // Real-time seen receipt
+  socket.on("markMessagesAsSeen", async ({ senderId }) => {
+    try {
+      const Message = (await import("../models/message.js")).default;
+      const res = await Message.updateMany(
+        { senderId, receiverId: userId, seen: false },
+        { $set: { seen: true } }
+      );
+      if (res.modifiedCount > 0) {
+        const senderSocketId = getReceiverSocketId(senderId);
+        if (senderSocketId) {
+          io.to(senderSocketId).emit("messagesSeen", { byUserId: userId });
+        }
+      }
+    } catch (err) {
+      console.error("Error in markMessagesAsSeen socket:", err.message);
+    }
+  });
+
   socket.on("disconnect", () => {
     console.log("A user disconnected", socket.id, socket.userId);
     if (userId) delete userSocketMap[userId];
