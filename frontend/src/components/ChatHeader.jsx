@@ -11,7 +11,7 @@ const ChatHeader = () => {
   const isOnline = onlineUsers.includes(selectedUser._id);
 
   return (
-    <div className="px-3 py-3 sm:px-5 sm:py-3.5 border-b border-slate-200/90 flex items-center justify-between bg-white/95 backdrop-blur-md z-10 shrink-0">
+    <div className="sticky top-0 z-40 px-3 py-3 sm:px-5 sm:py-3.5 border-b border-slate-200/90 flex items-center justify-between bg-white/95 backdrop-blur-md shadow-xs shrink-0">
       <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
         {/* MOBILE BACK BUTTON */}
         <button

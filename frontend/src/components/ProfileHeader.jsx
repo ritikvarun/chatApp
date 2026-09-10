@@ -36,7 +36,7 @@ const ProfileHeader = () => {
 
   return (
     <>
-      <div className="px-4 py-3.5 border-b border-slate-200/80 flex items-center justify-between bg-slate-100/40">
+      <div className="sticky top-0 z-40 px-4 py-3.5 border-b border-slate-200/80 flex items-center justify-between bg-white/95 backdrop-blur-md shadow-xs">
         <div className="flex items-center gap-3 min-w-0">
           {/* AVATAR WITH QUICK UPLOAD */}
           <div className="relative group flex-shrink-0">
