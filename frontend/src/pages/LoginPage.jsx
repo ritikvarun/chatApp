@@ -27,22 +27,22 @@ function LoginPage() {
   };
 
   return (
-    <div className="w-full flex items-center justify-center p-4">
-      <div className="relative w-full max-w-5xl md:h-[750px] min-h-[600px]">
+    <div className="w-full min-h-screen sm:min-h-0 flex items-center justify-center p-0 sm:p-4">
+      <div className="relative w-full max-w-5xl md:h-[750px] min-h-[100dvh] sm:min-h-[600px] flex">
         <BorderAnimatedContainer>
           <div className="w-full h-full flex flex-col md:flex-row">
             {/* FORM COLUMN - LEFT SIDE */}
-            <div className="w-full md:w-1/2 p-6 sm:p-10 flex flex-col justify-center md:border-r border-slate-700/50 overflow-y-auto">
+            <div className="w-full md:w-1/2 p-6 sm:p-10 flex flex-col justify-center md:border-r border-slate-200/80 bg-white overflow-y-auto">
               <div className="w-full max-w-md mx-auto">
                 {/* LOGO & HEADING */}
                 <div className="text-center mb-8">
-                  <div className="inline-flex items-center justify-center size-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 mb-3 shadow-lg shadow-cyan-500/10">
+                  <div className="inline-flex items-center justify-center size-12 rounded-xl bg-cyan-50 border border-cyan-200 text-cyan-600 mb-3 shadow-md shadow-cyan-500/10">
                     <MessageCircle className="size-6" />
                   </div>
-                  <h2 className="text-2xl font-bold text-slate-100 tracking-tight">
+                  <h2 className="text-2xl font-bold text-slate-800 tracking-tight">
                     Welcome Back
                   </h2>
-                  <p className="text-slate-400 text-sm mt-1">
+                  <p className="text-slate-500 text-sm mt-1">
                     Sign in to your account to continue
                   </p>
                 </div>
@@ -51,7 +51,7 @@ function LoginPage() {
                 <form onSubmit={handleSubmit} className="space-y-4">
                   {/* EMAIL */}
                   <div>
-                    <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                    <label className="block text-xs font-medium text-slate-700 mb-1.5">
                       Email Address
                     </label>
                     <div className="relative">
@@ -62,7 +62,7 @@ function LoginPage() {
                         type="email"
                         required
                         placeholder="you@example.com"
-                        className="w-full pl-10 pr-4 py-2.5 bg-slate-800/60 border border-slate-700/80 rounded-lg text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all"
+                        className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all"
                         value={formData.email}
                         onChange={(e) =>
                           setFormData({ ...formData, email: e.target.value })
@@ -73,7 +73,7 @@ function LoginPage() {
 
                   {/* PASSWORD */}
                   <div>
-                    <label className="block text-xs font-medium text-slate-300 mb-1.5">
+                    <label className="block text-xs font-medium text-slate-700 mb-1.5">
                       Password
                     </label>
                     <div className="relative">
@@ -84,7 +84,7 @@ function LoginPage() {
                         type={showPassword ? "text" : "password"}
                         required
                         placeholder="••••••••"
-                        className="w-full pl-10 pr-10 py-2.5 bg-slate-800/60 border border-slate-700/80 rounded-lg text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all"
+                        className="w-full pl-10 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all"
                         value={formData.password}
                         onChange={(e) =>
                           setFormData({ ...formData, password: e.target.value })
@@ -93,7 +93,7 @@ function LoginPage() {
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-200 transition-colors cursor-pointer"
+                        className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
                       >
                         {showPassword ? (
                           <EyeOff className="size-4" />
@@ -108,7 +108,7 @@ function LoginPage() {
                   <button
                     type="submit"
                     disabled={isLoggingIn}
-                    className="w-full py-2.5 px-4 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-slate-950 font-semibold rounded-lg text-sm transition-all duration-200 shadow-lg shadow-cyan-500/25 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed active:scale-[0.99] mt-2"
+                    className="w-full py-2.5 px-4 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-semibold rounded-lg text-sm transition-all duration-200 shadow-md shadow-cyan-600/20 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed active:scale-[0.99] mt-2"
                   >
                     {isLoggingIn ? (
                       <>
@@ -123,11 +123,11 @@ function LoginPage() {
 
                 {/* SIGNUP REDIRECT */}
                 <div className="text-center mt-6">
-                  <p className="text-slate-400 text-sm">
+                  <p className="text-slate-500 text-sm">
                     Don&apos;t have an account?{" "}
                     <Link
                       to="/signup"
-                      className="text-cyan-400 hover:text-cyan-300 font-medium hover:underline transition-colors"
+                      className="text-cyan-600 hover:text-cyan-700 font-semibold hover:underline transition-colors"
                     >
                       Create account
                     </Link>

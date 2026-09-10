@@ -89,6 +89,40 @@ export const useChatStore = create((set, get) => ({
       toast.error(error.response?.data?.message || "Something went wrong");
     }
   },
+
+  subscribeToMessages: () => {
+    const { selectedUser } = get();
+    if (!selectedUser) return;
+
+    const socket = useAuthStore.getState().socket;
+    if (!socket) return;
+
+    socket.off("newMessage");
+
+    socket.on("newMessage", (newMessage) => {
+      const isMessageSentFromSelectedUser = newMessage.senderId === selectedUser._id;
+      if (!isMessageSentFromSelectedUser) return;
+
+      const currentMessages = get().messages;
+      // Avoid duplicate message if already added
+      if (currentMessages.some((msg) => msg._id === newMessage._id)) return;
+
+      set({
+        messages: [...currentMessages, newMessage],
+      });
+
+      if (get().isSoundEnabled) {
+        const sound = new Audio("/sounds/keystroke1.mp3");
+        sound.play().catch(() => {});
+      }
+    });
+  },
+
+  unsubscribeFromMessages: () => {
+    const socket = useAuthStore.getState().socket;
+    if (!socket) return;
+    socket.off("newMessage");
+  },
 }));
 
 export default useChatStore;

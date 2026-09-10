@@ -11,10 +11,45 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.2);
+  background: rgba(100, 116, 139, 0.25);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(148, 163, 184, 0.4);
+  background: rgba(100, 116, 139, 0.45);
 }
+
+/* DaisyUI-compatible Avatar Online/Offline Indicator */
+.avatar {
+  position: relative;
+  display: inline-flex;
+}
+
+.avatar > div {
+  display: block;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+}
+
+.avatar.online:before,
+.avatar.offline:before {
+  content: "";
+  position: absolute;
+  z-index: 10;
+  display: block;
+  border-radius: 9999px;
+  width: 22%;
+  height: 22%;
+  bottom: 2%;
+  right: 2%;
+  box-shadow: 0 0 0 2px #ffffff;
+}
+
+.avatar.online:before {
+  background-color: #10b981;
+}
+
+.avatar.offline:before {
+  background-color: #94a3b8;
+}
+

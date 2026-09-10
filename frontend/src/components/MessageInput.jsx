@@ -53,18 +53,18 @@ function MessageInput() {
   };
 
   return (
-    <div className="p-4 w-full border-t border-slate-700/50 bg-slate-900/40">
+    <div className="p-2.5 sm:p-4 w-full border-t border-slate-200/90 bg-white/95 backdrop-blur-md shrink-0">
       {imagePreview && (
-        <div className="mb-3 flex items-center gap-2">
+        <div className="mb-2.5 flex items-center gap-2">
           <div className="relative">
             <img
               src={imagePreview}
               alt="Attachment Preview"
-              className="size-20 object-cover rounded-xl border border-slate-700"
+              className="size-20 object-cover rounded-xl border border-slate-200 shadow-sm"
             />
             <button
               onClick={removeImage}
-              className="absolute -top-1.5 -right-1.5 size-5 rounded-full bg-slate-800 border border-slate-600 text-slate-300 hover:text-white flex items-center justify-center transition-colors"
+              className="absolute -top-1.5 -right-1.5 size-5 rounded-full bg-white border border-slate-300 text-slate-600 hover:text-slate-900 shadow-xs flex items-center justify-center transition-colors cursor-pointer"
               type="button"
             >
               <X className="size-3" />
@@ -73,7 +73,7 @@ function MessageInput() {
         </div>
       )}
 
-      <form onSubmit={handleSendMessage} className="flex items-center gap-2">
+      <form onSubmit={handleSendMessage} className="flex items-center gap-1.5 sm:gap-2">
         <input
           type="file"
           accept="image/*"
@@ -85,8 +85,10 @@ function MessageInput() {
         <button
           type="button"
           onClick={() => fileInputRef.current?.click()}
-          className={`p-2.5 rounded-xl border border-slate-700/60 text-slate-400 hover:text-cyan-400 hover:border-cyan-500/40 hover:bg-slate-800/80 transition-colors ${
-            imagePreview ? "text-cyan-400 border-cyan-500/50 bg-cyan-500/10" : "bg-slate-800/50"
+          className={`p-2.5 rounded-xl sm:rounded-2xl border transition-all cursor-pointer shrink-0 ${
+            imagePreview
+              ? "text-cyan-600 border-cyan-400 bg-cyan-50"
+              : "border-slate-200 text-slate-500 hover:text-cyan-600 hover:border-cyan-400 hover:bg-slate-100 bg-[#f8fafc]"
           }`}
           title="Attach image"
         >
@@ -103,13 +105,13 @@ function MessageInput() {
               playRandomKeyStrokeSound();
             }
           }}
-          className="flex-1 bg-slate-800/80 border border-slate-700/60 rounded-xl px-4 py-2.5 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:border-cyan-500/80 focus:ring-1 focus:ring-cyan-500/80 transition-all"
+          className="flex-1 bg-[#f1f5f9] border border-slate-200/90 rounded-xl sm:rounded-2xl px-3.5 sm:px-4 py-2 sm:py-2.5 text-sm text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all shadow-xs"
         />
 
         <button
           type="submit"
           disabled={!text.trim() && !imagePreview}
-          className="p-2.5 bg-cyan-500 text-slate-950 hover:bg-cyan-400 disabled:opacity-40 disabled:hover:bg-cyan-500 disabled:cursor-not-allowed rounded-xl font-medium transition-colors shadow-md shadow-cyan-500/10"
+          className="p-2.5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white disabled:opacity-40 disabled:hover:from-cyan-600 disabled:hover:to-blue-600 disabled:cursor-not-allowed rounded-xl sm:rounded-2xl font-medium transition-all shadow-md shadow-blue-500/20 active:scale-95 cursor-pointer shrink-0"
           title="Send message"
         >
           <Send className="size-5" />

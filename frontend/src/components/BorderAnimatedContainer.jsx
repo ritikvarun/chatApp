@@ -2,11 +2,11 @@ import React from "react";
 
 const BorderAnimatedContainer = ({ children, className = "" }) => {
   return (
-    <div className={`relative w-full h-full p-[1px] rounded-2xl overflow-hidden ${className}`}>
-      {/* Animated gradient border glow */}
-      <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 via-pink-500 to-purple-500 rounded-2xl animate-pulse opacity-75" />
+    <div className={`relative w-full h-full p-0 sm:p-[1px] sm:rounded-2xl overflow-hidden ${className}`}>
+      {/* Animated gradient border glow on larger screens */}
+      <div className="hidden sm:block absolute inset-0 bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-400 sm:rounded-2xl animate-pulse opacity-50" />
       {/* Inner card container */}
-      <div className="relative w-full h-full bg-slate-900/90 backdrop-blur-xl rounded-2xl border border-slate-700/50 shadow-2xl overflow-hidden">
+      <div className="relative w-full h-full bg-white sm:bg-white/95 backdrop-blur-xl sm:rounded-2xl border-0 sm:border border-slate-200/90 shadow-none sm:shadow-2xl sm:shadow-slate-400/25 overflow-hidden">
         {children}
       </div>
     </div>

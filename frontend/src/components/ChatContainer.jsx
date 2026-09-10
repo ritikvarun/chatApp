@@ -7,16 +7,25 @@ import MessageInput from "./MessageInput";
 import { Loader2 } from "lucide-react";
 
 function ChatContainer() {
-  const { selectedUser, getMessagesByUserId, messages, isMessagesLoading } =
-    useChatStore();
-  const { authUser } = useAuthStore();
+  const {
+    selectedUser,
+    getMessagesByUserId,
+    messages,
+    isMessagesLoading,
+    subscribeToMessages,
+    unsubscribeFromMessages,
+  } = useChatStore();
+  const { authUser, socket } = useAuthStore();
   const messageEndRef = useRef(null);
 
   useEffect(() => {
     if (selectedUser?._id) {
       getMessagesByUserId(selectedUser._id);
+      subscribeToMessages();
     }
-  }, [selectedUser, getMessagesByUserId]);
+
+    return () => unsubscribeFromMessages();
+  }, [selectedUser?._id, getMessagesByUserId, subscribeToMessages, unsubscribeFromMessages, socket]);
 
   useEffect(() => {
     if (messageEndRef.current && messages) {
@@ -27,23 +36,23 @@ function ChatContainer() {
   if (!selectedUser) return null;
 
   return (
-    <div className="flex-1 flex flex-col h-full overflow-hidden">
+    <div className="flex-1 flex flex-col h-full overflow-hidden bg-[#fafbfc]">
       <ChatHeader />
 
-      <div className="flex-1 px-6 overflow-y-auto py-8">
+      <div className="flex-1 px-3 py-4 sm:px-6 sm:py-6 overflow-y-auto">
         {isMessagesLoading ? (
           <div className="flex flex-col items-center justify-center h-full text-slate-500 gap-2">
-            <Loader2 className="size-6 animate-spin text-cyan-500" />
+            <Loader2 className="size-6 animate-spin text-cyan-600" />
             <p className="text-xs">Loading messages...</p>
           </div>
         ) : messages.length > 0 ? (
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {messages.map((message) => {
               const isSender = message.senderId === authUser?._id;
               return (
                 <div
                   key={message._id}
-                  className={`flex items-end gap-2 ${
+                  className={`flex items-end gap-1.5 sm:gap-2 ${
                     isSender ? "justify-end" : "justify-start"
                   }`}
                 >
@@ -51,7 +60,7 @@ function ChatContainer() {
                     <img
                       src={selectedUser.profilePic || "/avatar.png"}
                       alt={selectedUser.fullName}
-                      className="size-8 rounded-full object-cover border border-slate-700 bg-slate-800"
+                      className="size-7 sm:size-8 rounded-full object-cover border-2 border-white shadow-xs bg-slate-100 shrink-0"
                       onError={(e) => {
                         e.target.onerror = null;
                         e.target.src = "/avatar.png";
@@ -59,10 +68,10 @@ function ChatContainer() {
                     />
                   )}
                   <div
-                    className={`max-w-xs md:max-w-md px-4 py-2.5 rounded-2xl text-sm ${
+                    className={`max-w-[84%] sm:max-w-md px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-2xl text-sm ${
                       isSender
-                        ? "bg-cyan-500 text-slate-950 font-medium rounded-br-none shadow-md shadow-cyan-500/10"
-                        : "bg-slate-800 text-slate-100 border border-slate-700/60 rounded-bl-none shadow-sm"
+                        ? "bg-gradient-to-br from-cyan-600 via-sky-600 to-blue-600 text-white font-medium rounded-br-xs shadow-sm shadow-blue-600/15"
+                        : "bg-white text-slate-800 border border-slate-200/90 rounded-bl-xs shadow-xs"
                     }`}
                   >
                     {message.image && (
@@ -77,10 +86,10 @@ function ChatContainer() {
                         }
                       />
                     )}
-                    {message.text && <p className="break-words">{message.text}</p>}
+                    {message.text && <p className="break-words leading-relaxed">{message.text}</p>}
                     <span
                       className={`text-[10px] block mt-1 ${
-                        isSender ? "text-cyan-950/70 text-right" : "text-slate-400"
+                        isSender ? "text-cyan-100 text-right" : "text-slate-400"
                       }`}
                     >
                       {new Date(message.createdAt).toLocaleTimeString([], {
@@ -93,7 +102,7 @@ function ChatContainer() {
                     <img
                       src={authUser?.profilePic || "/avatar.png"}
                       alt={authUser?.fullName}
-                      className="size-8 rounded-full object-cover border border-slate-700 bg-slate-800"
+                      className="size-7 sm:size-8 rounded-full object-cover border-2 border-white shadow-xs bg-slate-100 shrink-0"
                       onError={(e) => {
                         e.target.onerror = null;
                         e.target.src = "/avatar.png";
