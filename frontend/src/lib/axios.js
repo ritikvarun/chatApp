@@ -1,17 +1,11 @@
 import axios from "axios";
 
-const AZURE_BACKEND_URL = "https://ritikvarun-chatapp-gbesgpa2fzfkb2ej.centralindia-01.azurewebsites.net";
-
 export const getBackendURL = () => {
   if (import.meta.env.VITE_BACKEND_URL) {
     return import.meta.env.VITE_BACKEND_URL.replace(/\/$/, "");
   }
   if (import.meta.env.MODE === "development") {
     return "http://localhost:3000";
-  }
-  // When running on a separate host (e.g. Vercel / Netlify)
-  if (typeof window !== "undefined" && !window.location.host.includes("azurewebsites.net")) {
-    return AZURE_BACKEND_URL;
   }
   return "";
 };
